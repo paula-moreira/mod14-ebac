@@ -86,7 +86,6 @@ describe('Testes da Funcionalidade Usuários', () => {
     });
 
     it('Deve deletar um usuário previamente cadastrado', () => {
-        let email = `paulam${Date.now()}@qa.com`
         cy.cadastrarUsuario('Paula Moreira excluir', 'emai85647l3@excluir.com', 'senhaatelog', 'true').then(userId => {
             cy.request({
                 method: 'DELETE',

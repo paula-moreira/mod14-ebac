@@ -30,6 +30,14 @@ describe('Testes da Funcionalidade Usuários', () => {
             headers: { 'Authorization': token }
         }).should(response => {
             expect(response.status).to.equal(200)
+            response.body.usuarios.forEach((u) => {
+                expect(u).to.have.property('nome').that.is.a('string')
+                expect(u).to.have.property('email').that.is.a('string')
+                expect(u).to.have.property('password').that.is.a('string')
+                expect([true, false, 'true', 'false']).to.include(u.administrador)
+            })
+
+
         })
     });
 
@@ -63,6 +71,7 @@ describe('Testes da Funcionalidade Usuários', () => {
             failOnStatusCode: false
         }).should(response => {
             expect(response.status).to.equal(400)
+            expect(response.body.message).to.equal('Este email já está sendo usado')
         })
 
     });
@@ -82,21 +91,24 @@ describe('Testes da Funcionalidade Usuários', () => {
             failOnStatusCode: false
         }).should(response => {
             expect(response.status).to.equal(405)
+            expect(response.body).to.have.property('message')
+            expect(response.body.message).to.be.a('string')
+
         })
     });
 
     it('Deve deletar um usuário previamente cadastrado', () => {
-        let email = `paulam${Date.now()}@qa.com`
-        cy.cadastrarUsuario('Paula Moreira excluir', 'emai85647l3@excluir.com', 'senhaatelog', 'true').then(userId => {
+        cy.cadastrarUsuario('Paula Moreira excluir', 'emai8fiefe5fe6rfref47l3@excluir.com', 'senhaatelog', 'true').then(userId => {
             cy.request({
                 method: 'DELETE',
                 url: `usuarios/${userId}`,
                 headers: { 'Authorization': token }
             }).should(response => {
                 expect(response.status).to.equal(200)
-                //expect(response.body.message).to.equal('Registro Registro excluído com sucesso | Nenhum registro excluído com sucesso')
+                expect(response.body).to.have.property('message')
+                expect(response.body.message).to.be.a('string')
             })
-        
+
         });
 
 

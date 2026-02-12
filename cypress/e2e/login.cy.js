@@ -1,17 +1,20 @@
-/// <reference types= "cypress" />
+/// <reference types="cypress" />
 
-describe('Teste de API - Login', () => {
-    it('Deve realizar o login com sucesso', () => {
+describe('Login', () => {
+
+    it('Deve fazer login com sucesso', () => {
         cy.request({
             method: 'POST',
             url: 'login',
             body: {
-                "email": "fulano@qa.com",
-                "password": "teste"
+                "email":"paulam@qa.com",
+                "password": "teste12345" 
             }
-        }).should((Response) => {
-            expect(Response.body.message).to.equal('Login realizado com sucesso')
-            expect(Response.status).to.equal(200)
+        }).then((response) => {
+            expect(response.status).to.equal(200)
+            expect(response.body.message).to.equal('Login realizado com sucesso')
+            cy.log(response.body.authorization)
         })
-    })
+    });
+
 });
